@@ -1,0 +1,4 @@
+/updates/latest.json
+  Cache-Control: no-cache
+/updates/*
+  Cache-Control: public, max-age=3600

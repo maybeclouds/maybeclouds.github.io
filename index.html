@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SAYRO: голосовой ввод, который остаётся на вашем компьютере</title>
+<meta name="description" content="Диктуйте в любом приложении Windows. Распознавание речи работает локально, без интернета, русский язык из коробки." />
+<link rel="icon" href="orb.webp" />
+<style>
+  @font-face { font-family: Onest; font-weight: 100 900; font-display: swap; src: url(fonts/onest-cyrillic-wght-normal.woff2) format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+  @font-face { font-family: Onest; font-weight: 100 900; font-display: swap; src: url(fonts/onest-latin-wght-normal.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  :root {
+    --ink: #0c0c0e; --ink-2: #151518; --ink-3: #1e1e22; --line: rgba(255,255,255,.09);
+    --text: #ededf0; --muted: #8e8e97; --lime: #d7fa42;
+    --ease: cubic-bezier(.32,.72,0,1);
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--text); font: 16px/1.55 Onest, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { width: min(1080px, 100% - 40px); margin-inline: auto; }
+  section { padding: 84px 0; }
+  h1, h2, h3 { line-height: 1.1; letter-spacing: -.02em; font-weight: 650; }
+  h1 { font-size: clamp(38px, 6.2vw, 68px); }
+  h2 { font-size: clamp(28px, 4vw, 42px); }
+  .eyebrow { color: var(--lime); font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 14px; }
+  .lead { color: var(--muted); font-size: clamp(17px, 2vw, 20px); max-width: 620px; margin-top: 20px; }
+
+  /* top bar */
+  header { position: sticky; top: 0; z-index: 10; background: rgba(12,12,14,.8); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 62px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: .08em; }
+  .brand img { width: 30px; height: 30px; }
+  nav { display: flex; gap: 26px; color: var(--muted); font-size: 14px; }
+  nav a:hover { color: var(--text); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 22px; border-radius: 12px; font-weight: 600; font-size: 15px; background: var(--lime); color: #11130a; transition: transform .2s var(--ease), background .2s; }
+  .btn:hover { background: #e2ff62; transform: translateY(-1px); }
+  .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+  .btn.ghost:hover { background: rgba(255,255,255,.06); }
+  header .btn { padding: 9px 16px; font-size: 14px; }
+
+  /* hero */
+  .hero { padding-top: 76px; }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+  .hero h1 em { font-style: normal; color: var(--lime); }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .fine { color: var(--muted); font-size: 13px; margin-top: 14px; }
+
+  /* the live demo card */
+  .demo { position: relative; background: var(--ink-2); border: 1px solid var(--line); border-radius: 20px; padding: 22px; box-shadow: 0 30px 80px -30px rgba(0,0,0,.8); overflow: hidden; }
+  .demo::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 5px; background: repeating-linear-gradient(135deg, #000 0 8px, var(--lime) 8px 16px); background-size: 22.6px 22.6px; animation: slide 1s linear infinite; opacity: .9; }
+  @keyframes slide { to { background-position: 22.6px 0; } }
+  .win { margin-top: 10px; background: var(--ink); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-height: 108px; font-size: 15px; }
+  .win small { display: block; color: var(--muted); font-size: 12px; margin-bottom: 8px; }
+  .typed::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -2px; background: var(--lime); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .pillbar { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding: 10px 16px 10px 10px; border-radius: 999px; background: #0a0a0c; border: 1px solid rgba(215,250,66,.45); box-shadow: 0 0 24px rgba(215,250,66,.16); width: fit-content; }
+  .orb { position: relative; width: 38px; height: 38px; background: url(orb.webp) center / contain no-repeat; }
+  .orb svg { position: absolute; inset: 0; filter: drop-shadow(0 0 3px #d7fa42); }
+  .orb rect { fill: var(--lime); transform-box: fill-box; transform-origin: center; animation: blinkeye 4.8s ease-in-out infinite; }
+  @keyframes blinkeye { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+  .wave { display: flex; gap: 4px; align-items: center; height: 26px; }
+  .wave i { width: 4px; border-radius: 3px; background: var(--lime); animation: wave 1s ease-in-out infinite; }
+  @keyframes wave { 0%, 100% { height: 5px; } 50% { height: 22px; } }
+  .keys { display: flex; gap: 8px; margin-left: 4px; }
+  kbd { font: 600 12px/1 Onest, sans-serif; padding: 6px 9px; border-radius: 7px; background: var(--ink-3); border: 1px solid var(--line); box-shadow: 0 2px 0 rgba(0,0,0,.5); }
+
+  /* pillars */
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; }
+  .card { background: var(--ink-2); border: 1px solid var(--line); border-radius: 18px; padding: 26px; transition: border-color .25s var(--ease), transform .25s var(--ease); }
+  .card:hover { border-color: rgba(215,250,66,.4); transform: translateY(-3px); }
+  .card svg { color: var(--lime); margin-bottom: 18px; }
+  .card h3 { font-size: 20px; margin-bottom: 8px; letter-spacing: -.01em; }
+  .card p { color: var(--muted); font-size: 15px; }
+
+  /* features */
+  .feats { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 44px; }
+  .feats .card { padding: 22px; }
+  .feats h3 { font-size: 17px; }
+
+  /* steps */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 44px; counter-reset: s; }
+  .step { counter-increment: s; position: relative; padding-top: 52px; }
+  .step::before { content: counter(s); position: absolute; top: 0; left: 0; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: var(--lime); color: #11130a; font-weight: 700; }
+  .step h3 { font-size: 19px; margin-bottom: 6px; }
+  .step p { color: var(--muted); font-size: 15px; }
+
+  /* honesty table */
+  table { width: 100%; border-collapse: collapse; margin-top: 36px; font-size: 15px; background: var(--ink-2); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  td { padding: 15px 20px; border-top: 1px solid var(--line); vertical-align: top; }
+  tr:first-child td { border-top: 0; }
+  td:first-child { font-weight: 550; width: 38%; }
+  td:last-child { color: var(--muted); }
+  .ok { color: var(--lime); font-weight: 600; }
+
+  .plansrow { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 36px; max-width: 640px; }
+  .plansrow h3 { font-size: 17px; color: var(--muted); font-weight: 600; }
+  .plansrow .price { font-size: 38px; font-weight: 650; letter-spacing: -.02em; color: var(--text); margin: 6px 0; }
+  .plansrow .best { border-color: rgba(215,250,66,.5); }
+  .incl { margin-top: 28px; padding-left: 20px; color: var(--muted); max-width: 640px; }
+  .incl li + li { margin-top: 6px; }
+  footer a { text-decoration: underline; text-underline-offset: 3px; }
+  .final { text-align: center; }
+  .final .lead { margin-inline: auto; }
+  .final .cta { justify-content: center; }
+  footer { border-top: 1px solid var(--line); padding: 30px 0; color: var(--muted); font-size: 13px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 860px) {
+    .hero-grid, .pillars, .steps, .plansrow { grid-template-columns: 1fr; }
+    nav { display: none; }
+    section { padding: 60px 0; }
+    td:first-child { width: auto; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="orb.webp" alt="" />SAYRO</a>
+    <nav><a href="#why">Почему SAYRO</a><a href="#features">Возможности</a><a href="#privacy">Приватность</a></nav>
+    <a class="btn" href="#download">Скачать</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Голосовой ввод для Windows</p>
+        <h1>Говорите вместо печати. <em>Голос остаётся у вас.</em></h1>
+        <p class="lead">Зажмите Ctrl + Win, скажите фразу, отпустите. Текст появится там, где стоит курсор. Распознавание работает на вашем компьютере, без интернета и без отправки аудио.</p>
+        <div class="cta">
+          <a class="btn" href="#download">Скачать для Windows</a>
+          <a class="btn ghost" href="#features">Что умеет</a>
+        </div>
+        <p class="fine">Бесплатно · Windows 10 и 11 · русский и английский · модель при первом запуске около 160 МБ</p>
+      </div>
+
+      <div class="demo" aria-label="Пример диктовки">
+        <div class="win"><small>Любое приложение</small><span class="typed" id="typed"></span></div>
+        <div class="pillbar">
+          <div class="orb"><svg viewBox="0 0 100 100"><rect x="36.4" y="38.6" width="3.8" height="17" rx="1.9"/><rect x="62.1" y="38.6" width="3.8" height="17" rx="1.9"/></svg></div>
+          <div class="wave" aria-hidden="true">
+            <i style="animation-delay:0s"></i><i style="animation-delay:.12s"></i><i style="animation-delay:.24s"></i><i style="animation-delay:.36s"></i><i style="animation-delay:.24s"></i><i style="animation-delay:.12s"></i><i style="animation-delay:0s"></i>
+          </div>
+          <div class="keys"><kbd>Ctrl</kbd><kbd>Win</kbd></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why">
+    <div class="wrap">
+      <p class="eyebrow">Главное</p>
+      <h2 class="reveal">Три причины, по которым SAYRO не похож на облачные диктовки</h2>
+      <div class="pillars">
+        <div class="card reveal">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 11V8.2a4.5 4.5 0 0 1 9 0V11M6 11h12a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1ZM12 14.6v2.2"/></svg>
+          <h3>Всё на вашем компьютере</h3>
+          <p>Речь расшифровывается локальной моделью GigaAM. Ни аудио, ни текст диктовки никуда не отправляются.</p>
+        </div>
+        <div class="card reveal">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 9.5a12 12 0 0 1 17 0M6.4 12.6a8 8 0 0 1 11.2 0M9.3 15.6a4 4 0 0 1 5.4 0M12 18.6h.01M4 4l16 16"/></svg>
+          <h3>Работает без интернета</h3>
+          <p>Скачали модель один раз, и диктовка работает в самолёте, в метро и за корпоративным файрволом.</p>
+        </div>
+        <div class="card reveal">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 7h8M8.5 7c0 4-2 7-4.5 8.5M6 10.5c1 2 3 3.8 5.5 4.8M13 19l3.5-9 3.5 9M14.2 16.5h4.6"/></svg>
+          <h3>Русский как родной</h3>
+          <p>Модель обучена на русской речи. Названия, числа и разговорные фразы распознаются без танцев с бубном.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <p class="eyebrow">Возможности</p>
+      <h2 class="reveal">Больше, чем просто диктовка</h2>
+      <div class="feats">
+        <div class="card reveal"><h3>Диктовка в любом приложении</h3><p>Браузер, мессенджер, редактор кода. Текст вставляется туда, где курсор.</p></div>
+        <div class="card reveal"><h3>Голосовой ассистент</h3><p>Задайте вопрос голосом или попросите переписать выделенный текст. Работает через ваш Claude Code или Codex, без отдельных ключей.</p></div>
+        <div class="card reveal"><h3>Голосовые команды</h3><p>«SAYRO, включи Discord». Свои сценарии вроде «пора работать»: откроет Claude и плейлист.</p></div>
+        <div class="card reveal"><h3>Остров с лимитами</h3><p>Остаток лимитов Claude Code и Codex, погода, таймер, курсы, ближайшая встреча и что сейчас играет.</p></div>
+        <div class="card reveal"><h3>Телесуфлёр</h3><p>Текст для выступления поверх экрана. Скрыт от трансляции и записи экрана.</p></div>
+        <div class="card reveal"><h3>Заметки и звонки</h3><p>Все диктовки сохраняются. Запись звонка превращается в текстовую заметку.</p></div>
+        <div class="card reveal"><h3>Маскот и скины</h3><p>Живой маскот реагирует на речь. За диктовки копятся монеты на скины для маскота и острова.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="eyebrow">Как это работает</p>
+      <h2 class="reveal">Первая диктовка за минуту</h2>
+      <div class="steps">
+        <div class="step reveal"><h3>Установите</h3><p>Один установщик, без аккаунтов и регистрации.</p></div>
+        <div class="step reveal"><h3>Скачайте модель</h3><p>Один раз, около 160 МБ. Её можно положить в любую папку на диске.</p></div>
+        <div class="step reveal"><h3>Зажмите Ctrl + Win</h3><p>Говорите и отпускайте. Двойное нажатие включает режим без рук.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="wrap">
+      <p class="eyebrow">Приватность</p>
+      <h2 class="reveal">Что уходит в интернет, а что нет</h2>
+      <p class="lead">Без маркетинговых оговорок: вот всё, что SAYRO делает с сетью.</p>
+      <table class="reveal">
+        <tr><td>Распознавание речи</td><td><span class="ok">Только на вашем компьютере.</span> Аудио и текст диктовки не отправляются.</td></tr>
+        <tr><td>Голосовой ассистент</td><td>Вызывается только вашим сочетанием клавиш. Вопрос уходит в ваш собственный Claude Code или Codex, под вашим логином.</td></tr>
+        <tr><td>Погода, курсы валют, календарь</td><td>Только если вы включили эти модули на острове. Отправляется город или ссылка на календарь, голос не отправляется.</td></tr>
+        <tr><td>Заметки, команды, настройки</td><td>Хранятся в файлах на вашем компьютере.</td></tr>
+        <tr><td>Телесуфлёр</td><td>Скрыт от захвата экрана средствами Windows.</td></tr>
+      </table>
+    </div>
+  </section>
+
+  
+  <section id="download" class="final">
+    <div class="wrap">
+      <h2 class="reveal">Попробуйте SAYRO</h2>
+      <p class="lead">Установка занимает минуту. Если не понравится, деинсталлятор предложит удалить и все данные.</p>
+      <div class="cta">
+        <a class="btn" href="/updates/SAYRO_0.6.4_x64-setup.exe" download>Скачать для Windows</a>
+      </div>
+      <p class="fine">Версия 0.6.4 · Windows 10/11 · около 10 МБ · бесплатно</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    
+    <span>SAYRODEV · <a href="mailto:melloskiess@gmail.com">melloskiess@gmail.com</a></span>
+    <span><a href="/legal/privacy">Политика конфиденциальности</a></span>
+  </div>
+</footer>
+
+<script>
+  // The demo types a phrase in a loop.
+  (function () {
+    var el = document.getElementById("typed");
+    var phrases = [
+      "Привет! Скину отчёт сегодня до шести, посмотри, пожалуйста, цифры за квартал.",
+      "Напомни Ане, что созвон перенесли на четверг, на одиннадцать утра.",
+      "Добавь в задачи: подготовить презентацию для клиента и отправить договор."
+    ];
+    var i = 0, j = 0, dir = 1;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = phrases[0]; return; }
+    function tick() {
+      var p = phrases[i];
+      j += dir;
+      el.textContent = p.slice(0, j);
+      var wait = dir > 0 ? 38 : 14;
+      if (dir > 0 && j >= p.length) { dir = -1; wait = 2400; }
+      else if (dir < 0 && j <= 0) { dir = 1; i = (i + 1) % phrases.length; wait = 500; }
+      setTimeout(tick, wait);
+    }
+    tick();
+  })();
+  // Blocks fade in as they come into view.
+  (function () {
+    var els = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) { els.forEach(function (e) { e.classList.add("in"); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.15 });
+    els.forEach(function (e) { io.observe(e); });
+  })();
+</script>
+</body>
+</html>

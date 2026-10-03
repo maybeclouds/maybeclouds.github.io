@@ -1,0 +1,12 @@
+{
+  "version": "0.6.4",
+  "notes": "Первый публичный выпуск: диктовка на вашем компьютере, ассистент, голосовые команды, телесуфлёр, заметки.",
+  "pub_date": "2026-10-03T00:58:09.937Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRaGtXamdydFdFMjJ4ai9hQ0NHQWNnaUlSUUkxbXJBc2pQajBnRU9XaExJS0xFRDRiUEt5WGFEQXdpRUNXbTUrb0RHazZDeVBlcU1nVFM2eWVqejUwQXZ4Q09UZEs1ZkFBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwOTg5MDg1CWZpbGU6U0FZUk9fMC42LjRfeDY0LXNldHVwLmV4ZQl2ZXJzaW9uOjAuNi40CjZ3MnJQaFUveGVsVnRrK1c1cHd1NEl2NmdKenllM0RHUkF3TDVoa004d0JPRXJiNk1mTmJXUnI0ejNDMkZGdjdBNDhyVlk5S2RsbDVTbEJNNDlQbEFRPT0K",
+      "url": "https://maybeclouds.github.io/updates/SAYRO_0.6.4_x64-setup.exe",
+      "sha256": "39c3b2a2f7b3d79426a5353b69e34086a2fbc42bbd03838f460a9039e4ffde22"
+    }
+  }
+}
