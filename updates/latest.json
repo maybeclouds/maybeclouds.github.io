@@ -1,12 +1,12 @@
 {
-  "version": "0.6.4",
-  "notes": "Первый публичный выпуск: диктовка на вашем компьютере, ассистент, голосовые команды, телесуфлёр, заметки.",
-  "pub_date": "2026-10-03T00:58:09.937Z",
+  "version": "0.6.10",
+  "notes": "Остров: окно подогнано под раскрытые лимиты, ничего не обрезается. Новые анимации коллекции и живое превью острова.",
+  "pub_date": "2026-10-03T17:34:25.158Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRaGtXamdydFdFMjJ4ai9hQ0NHQWNnaUlSUUkxbXJBc2pQajBnRU9XaExJS0xFRDRiUEt5WGFEQXdpRUNXbTUrb0RHazZDeVBlcU1nVFM2eWVqejUwQXZ4Q09UZEs1ZkFBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwOTg5MDg1CWZpbGU6U0FZUk9fMC42LjRfeDY0LXNldHVwLmV4ZQl2ZXJzaW9uOjAuNi40CjZ3MnJQaFUveGVsVnRrK1c1cHd1NEl2NmdKenllM0RHUkF3TDVoa004d0JPRXJiNk1mTmJXUnI0ejNDMkZGdjdBNDhyVlk5S2RsbDVTbEJNNDlQbEFRPT0K",
-      "url": "https://maybeclouds.github.io/updates/SAYRO_0.6.4_x64-setup.exe",
-      "sha256": "39c3b2a2f7b3d79426a5353b69e34086a2fbc42bbd03838f460a9039e4ffde22"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRaGtXamdydFdFMnp5RVNTLzZWNDlvanRRSGE2UTRpMWE4UUpUNnY4YUZyOXRzWkdpRnZxWDdxS3VaNTRVODdQQ21SY0dkOUJBYlA5bVBaM0VLUExCMlJVb2Znb3Q4ZGdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxMDQ4ODQ4CWZpbGU6U0FZUk9fMC42LjEwX3g2NC1zZXR1cC5leGUJdmVyc2lvbjowLjYuMTAKU084N3BrUUpIRVJpYTJzeXduN2FMMWNkdSt3YXE5cUE4TFFYNVV2eHN4VDFIN2dWNXE3YStEZi9wQ2xnNWx1RFVmbk96R1F6NEVJNTQ5UWJoQ2lrRHc9PQo=",
+      "url": "https://maybeclouds.github.io/updates/SAYRO_0.6.10_x64-setup.exe",
+      "sha256": "b0424132068ee01912b1331b8f697fec21e070345c55387c144dd9031c91b67e"
     }
   }
 }
