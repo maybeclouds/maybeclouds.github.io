@@ -1,12 +1,12 @@
 {
-  "version": "0.6.10",
-  "notes": "Остров: окно подогнано под раскрытые лимиты, ничего не обрезается. Новые анимации коллекции и живое превью острова.",
-  "pub_date": "2026-10-03T17:34:25.158Z",
+  "version": "0.6.12",
+  "notes": "Исправлена проверка обновлений: если приложение собрано без адреса обновлений, оно теперь по умолчанию смотрит последний релиз на GitHub. Ранее такая копия писала «У вас последняя версия», не видя новых версий.",
+  "pub_date": "2026-10-04T16:41:29.997Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRaGtXamdydFdFMnp5RVNTLzZWNDlvanRRSGE2UTRpMWE4UUpUNnY4YUZyOXRzWkdpRnZxWDdxS3VaNTRVODdQQ21SY0dkOUJBYlA5bVBaM0VLUExCMlJVb2Znb3Q4ZGdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxMDQ4ODQ4CWZpbGU6U0FZUk9fMC42LjEwX3g2NC1zZXR1cC5leGUJdmVyc2lvbjowLjYuMTAKU084N3BrUUpIRVJpYTJzeXduN2FMMWNkdSt3YXE5cUE4TFFYNVV2eHN4VDFIN2dWNXE3YStEZi9wQ2xnNWx1RFVmbk96R1F6NEVJNTQ5UWJoQ2lrRHc9PQo=",
-      "url": "https://maybeclouds.github.io/updates/SAYRO_0.6.10_x64-setup.exe",
-      "sha256": "b0424132068ee01912b1331b8f697fec21e070345c55387c144dd9031c91b67e"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVRaGtXamdydFdFMi9qVTgxeUJrcFdXait1R3hhUkJYUVBucG85T2k0dkRHL0N5UlA2bWVhZXh0UDg5VUI1N3BrT2czRUxUNXNsM1U2bFZITEpxeXkzeW5YeDlrd0xuTWdvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkxMTMyMDc4CWZpbGU6U0FZUk9fMC42LjEyX3g2NC1zZXR1cC5leGUJdmVyc2lvbjowLjYuMTIKQVRpK2s0S3htSlUyTDZ2M3prY0x1Qlp4T1Y3MWVEWmNhSFUydTQ3Z1E5RzgvcXA3ZmV5cTBTZHEzRmJsdXBtZ3U5TDFuTWFhTTUvTGhPRzFNUDZPQVE9PQo=",
+      "url": "https://github.com/melloskiess-spec/sayro-releases/releases/download/v0.6.12/SAYRO_0.6.12_x64-setup.exe",
+      "sha256": "dfb0f1aa966366c00f3ba175e8537bf727f05d3633fc8fd85a8b16b1cbb16985"
     }
   }
 }
